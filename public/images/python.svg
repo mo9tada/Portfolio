@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" fill="none">
+  <rect width="320" height="200" rx="24" fill="#0B1120" />
+  <rect width="320" height="200" rx="24" fill="url(#gradPy)" opacity="0.4" />
+  <text x="32" y="84" fill="#FACC15" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="700">Py</text>
+  <text x="32" y="140" fill="#E2E8F0" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="20">FastAPI · Data</text>
+  <defs>
+    <linearGradient id="gradPy" x1="0" y1="0" x2="320" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" fill="none">
+  <rect width="320" height="200" rx="24" fill="#111827" />
+  <rect width="320" height="200" rx="24" fill="url(#gradJava)" opacity="0.45" />
+  <text x="32" y="84" fill="#F97316" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="700">Java</text>
+  <text x="32" y="140" fill="#F8FAFC" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="20">Spring · APIs</text>
+  <defs>
+    <linearGradient id="gradJava" x1="0" y1="0" x2="320" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FB7185" />
+      <stop offset="100%" stop-color="#F472B6" />
+    </linearGradient>
+  </defs>
+</svg>
