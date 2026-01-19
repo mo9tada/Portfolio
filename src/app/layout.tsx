@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, La_Belle_Aurore } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sparkles } from "@/components/ui/sparkles";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import Navbar from "@/components/navbar";
-const inter=Inter();
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 
 export const metadata: Metadata = {
@@ -19,12 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} antialiased`}
-      > 
-        <Navbar/>
-        {children}
-
+      <body className={`${inter.className} bg-black text-white antialiased`}>
+        <Navbar />
+        <main className="pt-24 sm:pt-28">{children}</main>
       </body>
     </html>
   );
