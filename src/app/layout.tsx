@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Portfolio Next.js Starter",
-  description: "Opinionated Next.js + Tailwind baseline prepared by GPT-5.1-Codex.",
+  description: "A portfolio template built with Next.js, Tailwind CSS, and TypeScript.",
 };
 
 export default function RootLayout({
