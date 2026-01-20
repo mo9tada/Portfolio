@@ -21,19 +21,20 @@ const languages: Language[] = [
   { image: "/images/python.svg", name: "Python", stack: "FastAPI · Data", years: "3 years", blurb: "Automation scripts, APIs, and ML prototypes." },
   { image: "/images/java.svg", name: "Java", stack: "Spring", years: "1+ years", blurb: "Tooling and interactive experiences." },
   { image: "/images/cpp.svg", name: "C++", stack: "Algorithms", years: "3 years", blurb: "Competitive programming and performance-critical apps." },
+  { image: "/images/sql.svg", name: "SQL", stack: "Data Stack", years: "3 years", blurb: "Database management and data analysis." },
 ];
 
 const highlights: Highlight[] = [
-  { label: "Based in", value: "Tunis, TN", detail: "UTC+1" },
+  { label: "Based in", value: "Tunis, TN", detail: "Nabeul" },
   { label: "Current Focus", value: "Web Engineering", detail: "Next.js · React 19" },
   { label: "Collabs", value: "Available", detail: "Product + Full Explanation " },
 ];
 
 export default function BiographyPage() {
   return (
-    <div className="relative min-h-screen w-full bg-black px-4 py-16 text-white">
+    <div className="relative min-h-screen w-full bg-black px-4 pb-16 text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_45%)]" aria-hidden />
-      <div className="relative mx-auto flex max-w-5xl flex-col gap-12">
+      <div className="relative mx-auto flex max-w-5xl flex-col gap-12 pt-32 sm:pt-40">
         <header className="flex flex-col items-center gap-6 text-center">
           <h1 className="p-4 sm:text-5xl font-bold uppercase tracking-[0.5em] text-emerald-300">Zaidi Moktada</h1>
           <p className="text-base text-white/80 sm:text-lg">
@@ -42,7 +43,11 @@ export default function BiographyPage() {
             platforms.
           </p>
           <div className="flex flex-col items-center gap-3 sm:flex-row">
-            <ExploreButton className="w-full sm:w-auto">Download Résumé</ExploreButton>
+            
+            <Link href="/Resume.pdf" download className="w-full sm:w-auto" target="_blank" rel="noreferrer">
+              <ExploreButton className="w-full sm:w-auto">Download Résumé</ExploreButton>
+            </Link>
+          
             <Link
               href="/Contact"
               className="rounded-full border border-white/30 px-8 py-4 text-xs font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-white/10"

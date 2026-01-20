@@ -42,9 +42,9 @@ const socials: SocialLink[] = [
 
 export default function ContactPage() {
     return (
-        <div className="relative flex min-h-screen w-full items-center justify-center bg-black px-4 py-16 text-white">
+        <div className="relative flex min-h-screen w-full items-center justify-center bg-black px-4 pb-16 text-white">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.35),_transparent_45%)]" aria-hidden />
-            <div className="relative flex w-full max-w-4xl flex-col items-center gap-8 text-center">
+            <div className="relative flex w-full max-w-4xl flex-col items-center gap-8 pt-32 text-center sm:pt-40">
                 <div className="flex flex-col gap-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.6em] text-emerald-300">Reach Out</p>
                     <p className="text-4xl font-bold uppercase tracking-[0.3em] sm:text-5xl">Get in Touch</p>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" fill="none">
+  <rect width="320" height="200" rx="24" fill="#030712" />
+  <rect width="320" height="200" rx="24" fill="url(#gradSQL)" opacity="0.45" />
+  <g filter="url(#glow)">
+    <path
+      d="M230 88c0 30-32 54-70 54s-70-24-70-54 32-54 70-54 70 24 70 54Z"
+      stroke="#38BDF8"
+      stroke-width="2"
+      fill="none"
+    />
+    <ellipse cx="160" cy="88" rx="44" ry="16" fill="#0EA5E9" fill-opacity="0.2" />
+  </g>
+  <text x="40" y="150" fill="#F8FAFC" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="64" font-weight="700">
+    SQL
+  </text>
+  <text x="40" y="174" fill="#A5F3FC" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" letter-spacing="0.4em">
+    DATA STACK
+  </text>
+  <defs>
+    <linearGradient id="gradSQL" x1="40" y1="0" x2="320" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0EA5E9" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+    <filter id="glow" x="60" y="18" width="200" height="160" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feBlend in="SourceGraphic" in2="blur" mode="screen" />
+    </filter>
+  </defs>
+</svg>
