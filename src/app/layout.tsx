@@ -7,6 +7,7 @@ import Footer from "@/components/footer";
 import AmbientBackground from "@/components/ambient-background";
 import MotionProvider from "@/components/motion-provider";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { LoadingScreen } from "@/components/loading-screen";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
@@ -28,8 +29,9 @@ export const viewport: Viewport = {
   ],
 };
 
-// Runs before paint so the stored/system theme applies without a flash.
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d);}catch(e){document.documentElement.classList.add('dark');}})();`;
+// Runs before paint: applies the stored/system theme without a flash, and turns on
+// the loading screen (only when JS runs, so a no-JS visit never sees it).
+const themeScript = `(function(){document.documentElement.classList.add('loading');try{var t=localStorage.getItem('theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d);}catch(e){document.documentElement.classList.add('dark');}})();`;
 
 export default function RootLayout({
   children,
@@ -42,6 +44,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="min-h-dvh">
+        <LoadingScreen />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-foreground"
