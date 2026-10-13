@@ -1,108 +1,152 @@
-import { ExploreButton } from "@/components/ui/explore-button";
-import Image from "next/image";
-import Link from "next/link";
+import type { Metadata } from "next";
+import { Award, Download, GraduationCap, Languages, Mail, MapPin, Sparkles } from "lucide-react";
+import { ButtonLink } from "@/components/ui/button-link";
+import { Reveal, RevealItem } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { TiltCard } from "@/components/ui/tilt-card";
+import { SkillSphere } from "@/components/three/skill-sphere";
+import { allSkills, certifications, education, profile, qualities, skillGroups, spokenLanguages } from "@/lib/data";
 
-type Language = {
-  image: string;
-  name: string;
-  stack: string;
-  years: string;
-  blurb: string;
-};
-
-type Highlight = {
-  label: string;
-  value: string;
-  detail: string;
-};
-
-const languages: Language[] = [
-  { image: "/images/typescript.svg", name: "TypeScript", stack: "Next.js · React", years: "1+ years", blurb: "Ship modern web apps with App Router + server actions." },
-  { image: "/images/python.svg", name: "Python", stack: "FastAPI · Data", years: "3 years", blurb: "Automation scripts, APIs, and ML prototypes." },
-  { image: "/images/java.svg", name: "Java", stack: "Spring", years: "1+ years", blurb: "Tooling and interactive experiences." },
-  { image: "/images/cpp.svg", name: "C++", stack: "Algorithms", years: "3 years", blurb: "Competitive programming and performance-critical apps." },
-  { image: "/images/sql.svg", name: "SQL", stack: "Data Stack", years: "3 years", blurb: "Database management and data analysis." },
-];
-
-const highlights: Highlight[] = [
-  { label: "Based in", value: "Tunis, TN", detail: "Nabeul" },
-  { label: "Current Focus", value: "Web Engineering", detail: "Next.js · React 19" },
-  { label: "Collabs", value: "Available", detail: "Product + Full Explanation " },
-];
+export const metadata: Metadata = { title: "About" };
 
 export default function BiographyPage() {
   return (
-    <div className="relative min-h-screen w-full bg-black px-4 pb-16 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_45%)]" aria-hidden />
-      <div className="relative mx-auto flex max-w-5xl flex-col gap-12 pt-32 sm:pt-40">
-        <header className="flex flex-col items-center gap-6 text-center">
-          <h1 className="p-4 sm:text-5xl font-bold uppercase tracking-[0.5em] text-emerald-300">Zaidi Moktada</h1>
-          <p className="text-base text-white/80 sm:text-lg">
-            Tunisian software engineering student passionate about crafting expressive user experiences and resilient
-            systems. I explore the intersection of interaction design, AI-assisted tooling, and robust cloud-native
-            platforms.
-          </p>
-          <div className="flex flex-col items-center gap-3 sm:flex-row">
-            
-            <Link href="/Resume.pdf" download className="w-full sm:w-auto" target="_blank" rel="noreferrer">
-              <ExploreButton className="w-full sm:w-auto">Download Résumé</ExploreButton>
-            </Link>
-          
-            <Link
-              href="/Contact"
-              className="rounded-full border border-white/30 px-8 py-4 text-xs font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-white/10"
-            >
+    <div className="mx-auto max-w-6xl px-4 pt-32 sm:px-6 sm:pt-40">
+      {/* Intro */}
+      <header className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <SectionHeading
+          as="h1"
+          eyebrow="About me"
+          title={<>From analysis to <span className="text-gradient">production</span>.</>}
+          description={profile.summary}
+        />
+        <Reveal delay={0.1} className="flex flex-col gap-4 lg:items-end">
+          <div className="flex flex-wrap gap-2 lg:justify-end">
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-surface/70 px-3 py-1.5 text-xs text-muted-foreground">
+              <MapPin className="h-3.5 w-3.5" aria-hidden /> {profile.location}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-surface/70 px-3 py-1.5 text-xs text-muted-foreground">
+              <GraduationCap className="h-3.5 w-3.5" aria-hidden /> B.Sc. Computer Science, 2026
+            </span>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href="/Resume.pdf" target="_blank" rel="noreferrer" download>
+              <Download className="h-4 w-4" aria-hidden />
+              Download résumé
+            </ButtonLink>
+            <ButtonLink href="/Contact" variant="secondary">
+              <Mail className="h-4 w-4" aria-hidden />
               Contact
-            </Link>
+            </ButtonLink>
           </div>
-        </header>
+        </Reveal>
+      </header>
 
-        <section className="grid gap-4 sm:grid-cols-3">
-          {highlights.map((item) => (
-            <article
-              key={item.label}
-              className="rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-center backdrop-blur"
-            >
-              <p className="text-xs uppercase tracking-[0.4em] text-emerald-300">{item.label}</p>
-              <p className="mt-2 text-2xl font-semibold">{item.value}</p>
-              <p className="text-sm text-white/70">{item.detail}</p>
-            </article>
-          ))}
-        </section>
-
-        <section className="space-y-4">
-          <div className="flex flex-col gap-3 text-left">
-            <p className="text-xs font-semibold uppercase tracking-[0.5em] text-emerald-300">Toolbox</p>
-            <h2 className="text-2xl font-semibold">Languages I build with</h2>
-            <p className="text-sm text-white/70">
-              From data-heavy backends to pixel-perfect frontends, these stacks form the backbone of my prototyping and
-              production work.
-            </p>
-          </div>
-          <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2">
-            {languages.map((lang) => (
-              <article
-                key={lang.name}
-                className="rounded-2xl border border-white/15 bg-white/5 p-5 text-left backdrop-blur"
-              >
-                <div className="relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-black/30">
-                  <Image
-                    src={lang.image}
-                    alt={`${lang.name} badge`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-                <p className="mt-4 text-xs uppercase tracking-[0.4em] text-emerald-300">{lang.years}</p>
-                <h3 className="mt-1 text-xl font-semibold">{lang.name}</h3>
-                <p className="text-sm text-white/70">{lang.stack}</p>
-                <p className="mt-3 text-sm text-white/60">{lang.blurb}</p>
-              </article>
+      {/* Skills */}
+      <section className="pt-24 sm:pt-32">
+        <SectionHeading
+          eyebrow="Toolbox"
+          title="Skills & stack"
+          description="Full-stack across web, data and mobile — drag the sphere to spin it."
+        />
+        <div className="mt-10 grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
+          <Reveal y={0}>
+            <SkillSphere skills={allSkills} />
+          </Reveal>
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {skillGroups.map((g, i) => (
+              <RevealItem key={g.label} delay={i * 0.06} className="h-full">
+                <TiltCard className="p-5">
+                  <h3 className="font-mono text-xs font-medium uppercase tracking-wider text-accent [transform:translateZ(20px)]">
+                    {g.label}
+                  </h3>
+                  <ul className="mt-3 flex flex-wrap gap-2 [transform:translateZ(30px)]">
+                    {g.items.map((item) => (
+                      <li key={item} className="rounded-full border bg-surface-2 px-2.5 py-1 text-sm">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </TiltCard>
+              </RevealItem>
             ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Education, languages, certifications */}
+      <section className="pt-24 sm:pt-32">
+        <SectionHeading eyebrow="Background" title="Education & credentials" />
+        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Reveal className="h-full">
+            <TiltCard className="flex flex-col p-6">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent [transform:translateZ(40px)]">
+                <GraduationCap className="h-6 w-6" aria-hidden />
+              </span>
+              <p className="mt-5 font-mono text-xs text-subtle-foreground">{education.period}</p>
+              <h3 className="mt-1 text-lg font-semibold tracking-tight">{education.degree}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{education.school}</p>
+              <p className="text-sm text-subtle-foreground">{education.university}</p>
+            </TiltCard>
+          </Reveal>
+
+          <Reveal delay={0.06} className="h-full">
+            <TiltCard className="flex flex-col p-6">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent [transform:translateZ(40px)]">
+                <Languages className="h-6 w-6" aria-hidden />
+              </span>
+              <h3 className="mt-5 text-lg font-semibold tracking-tight">Languages</h3>
+              <ul className="mt-3 space-y-3">
+                {spokenLanguages.map((l) => (
+                  <li key={l.name} className="flex items-center justify-between gap-4 text-sm">
+                    <span>{l.name}</span>
+                    <span className="flex items-center gap-2">
+                      <span className="flex gap-1" aria-hidden>
+                        {[1, 2, 3].map((n) => (
+                          <span key={n} className={`h-1.5 w-5 rounded-full ${n <= l.value ? "bg-accent" : "bg-surface-2"}`} />
+                        ))}
+                      </span>
+                      <span className="w-12 text-right font-mono text-xs text-muted-foreground">{l.level}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </TiltCard>
+          </Reveal>
+
+          <Reveal delay={0.12} className="h-full md:col-span-2 lg:col-span-1">
+            <TiltCard className="flex flex-col p-6">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent [transform:translateZ(40px)]">
+                <Award className="h-6 w-6" aria-hidden />
+              </span>
+              <h3 className="mt-5 text-lg font-semibold tracking-tight">Certifications</h3>
+              <ul className="mt-3 space-y-3">
+                {certifications.map((c) => (
+                  <li key={c.name} className="text-sm">
+                    <span className="block font-medium">{c.name}</span>
+                    <span className="block font-mono text-xs text-subtle-foreground">{c.issuer}</span>
+                  </li>
+                ))}
+              </ul>
+            </TiltCard>
+          </Reveal>
+        </div>
+
+        <Reveal className="mt-6">
+          <div className="card flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
+            <span className="flex items-center gap-2 text-sm font-semibold">
+              <Sparkles className="h-4 w-4 text-accent" aria-hidden /> Soft skills
+            </span>
+            <ul className="flex flex-wrap gap-2">
+              {qualities.map((q) => (
+                <li key={q} className="rounded-full border bg-surface-2 px-3 py-1 text-sm text-muted-foreground">
+                  {q}
+                </li>
+              ))}
+            </ul>
           </div>
-        </section>
-      </div>
+        </Reveal>
+      </section>
     </div>
   );
 }

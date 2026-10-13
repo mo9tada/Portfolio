@@ -1,84 +1,60 @@
-import Link from "next/link";
-import { Facebook, Github, Instagram, Linkedin, Mail } from "lucide-react";
+import type { Metadata } from "next";
+import { ArrowUpRight } from "lucide-react";
+import { RevealItem, Reveal } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { ContactForm } from "@/components/contact-form";
+import { CopyEmail } from "@/components/copy-email";
+import { socials } from "@/lib/data";
 
-type SocialLink = {
-    label: string;
-    handle: string;
-    href: string;
-    icon: typeof Facebook;
-    accent: string;
-};
-
-const socials: SocialLink[] = [
-    {
-        label: "Facebook",
-        handle: "Moktada Zaidi",
-        href: "https://www.facebook.com/moktada.zaidi/",
-        icon: Facebook,
-        accent: "from-blue-500/50 to-blue-300/30",
-    },
-    {
-        label: "LinkedIn",
-        handle: "in/moktada_zaidi",
-        href: "https://www.linkedin.com/in/moktada-zaidi-677b94313/",
-        icon: Linkedin,
-        accent: "from-sky-500/50 to-cyan-300/30",
-    },
-    {
-        label: "GitHub",
-        handle: "github.com/mo9tada",
-        href: "https://github.com/mo9tada",
-        icon: Github,
-        accent: "from-slate-700/70 to-slate-500/40",
-    },
-    {
-        label: "Email",
-        handle: "moktadazaidi@gmail.com",
-        href: "mailto:moktadazaidi@gmail.com",
-        icon: Mail,
-        accent: "from-emerald-500/50 to-lime-300/30",
-    },
-];
+export const metadata: Metadata = { title: "Contact" };
 
 export default function ContactPage() {
     return (
-        <div className="relative flex min-h-screen w-full items-center justify-center bg-black px-4 pb-16 text-white">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.35),_transparent_45%)]" aria-hidden />
-            <div className="relative flex w-full max-w-4xl flex-col items-center gap-8 pt-32 text-center sm:pt-40">
+        <div className="mx-auto max-w-6xl px-4 pt-32 sm:px-6 sm:pt-40">
+            <SectionHeading
+                as="h1"
+                eyebrow="Reach out"
+                title={<>Let&apos;s <span className="text-gradient">build together</span></>}
+                description="Based in Tunis and open to full-stack roles, freelance missions and new projects. Drop a note below or reach me on any platform."
+            />
+
+            <div className="mt-12 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
                 <div className="flex flex-col gap-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.6em] text-emerald-300">Reach Out</p>
-                    <p className="text-4xl font-bold uppercase tracking-[0.3em] sm:text-5xl">Get in Touch</p>
-                    <p className="text-base font-normal text-white/80 sm:text-lg">
-                        I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-                        Drop a note on any platform below and let's build together.
-                    </p>
+                    <Reveal>
+                        <CopyEmail />
+                    </Reveal>
+                    <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                        {socials
+                            .filter((s) => s.label !== "Email")
+                            .map(({ label, handle, href, icon: Icon }, i) => (
+                                <RevealItem key={label} delay={0.05 * (i + 1)}>
+                                    <a
+                                        href={href}
+                                        target={href.startsWith("http") ? "_blank" : undefined}
+                                        rel={href.startsWith("http") ? "noreferrer" : undefined}
+                                        className="card group flex min-h-20 items-center gap-4 px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40"
+                                    >
+                                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent transition-transform duration-200 group-hover:scale-105">
+                                            <Icon className="h-5 w-5" aria-hidden />
+                                        </span>
+                                        <span className="min-w-0 flex-1">
+                                            <span className="block text-sm font-semibold">{label}</span>
+                                            <span className="block truncate font-mono text-xs text-muted-foreground">{handle}</span>
+                                        </span>
+                                        <ArrowUpRight
+                                            className="h-4 w-4 shrink-0 text-subtle-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+                                            aria-hidden
+                                        />
+                                        {href.startsWith("http") && <span className="sr-only">(opens in a new tab)</span>}
+                                    </a>
+                                </RevealItem>
+                            ))}
+                    </ul>
                 </div>
 
-                <section className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-                    {socials.map((social) => {
-                        const Icon = social.icon;
-                        return (
-                            <Link
-                                key={social.label}
-                                href={social.href}
-                                target={social.href.startsWith("http") ? "_blank" : undefined}
-                                rel={social.href.startsWith("http") ? "noreferrer" : undefined}
-                                className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-left backdrop-blur transition hover:border-white/40"
-                            >
-                                <div
-                                    className={`relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br ${social.accent}`}
-                                >
-                                    <Icon className="h-6 w-6 text-white" aria-hidden />
-                                </div>
-                                <div>
-                                    <p className="text-sm uppercase tracking-[0.4em] text-emerald-300">{social.label}</p>
-                                    <p className="text-lg font-semibold">{social.handle}</p>
-                                    <p className="text-xs text-white/60 group-hover:text-white/80">Tap to open</p>
-                                </div>
-                            </Link>
-                        );
-                    })}
-                </section>
+                <Reveal delay={0.1}>
+                    <ContactForm />
+                </Reveal>
             </div>
         </div>
     );
