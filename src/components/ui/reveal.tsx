@@ -1,37 +1,40 @@
-"use client";
+import type { CSSProperties, HTMLAttributes, LiHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-import { motion, type HTMLMotionProps } from "motion/react";
+type RevealOptions = {
+  /** Stagger. Seconds for `immediate`; otherwise shifts the scroll range slightly. */
+  delay?: number;
+  /** Starting offset in px. */
+  y?: number;
+  /** Animate on first paint (above-the-fold) instead of on scroll. */
+  immediate?: boolean;
+};
 
-type RevealProps = HTMLMotionProps<"div"> & { delay?: number; y?: number };
+// CSS-only (see .enter / .reveal in globals.css): server-rendered, visible without
+// JavaScript, and no IntersectionObservers — keeps first load and scrolling light.
+function revealProps({ delay = 0, y = 20, immediate = false }: RevealOptions, className?: string, style?: CSSProperties) {
+  const vars: Record<`--${string}`, string | number> = immediate
+    ? { "--enter-y": `${y}px`, "--enter-delay": `${delay}s` }
+    : { "--enter-y": `${y}px`, "--reveal-delay": delay };
+  return {
+    className: cn(immediate ? "enter" : "reveal", className),
+    style: { ...vars, ...style } as CSSProperties,
+  };
+}
 
-/** Fades + lifts its children into view once, when scrolled into the viewport. */
-export function Reveal({ delay = 0, y = 20, children, ...props }: RevealProps) {
+export function Reveal({ delay, y, immediate, className, style, children, ...props }: HTMLAttributes<HTMLDivElement> & RevealOptions) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
-      {...props}
-    >
+    <div {...props} {...revealProps({ delay, y, immediate }, className, style)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
-type RevealItemProps = HTMLMotionProps<"li"> & { delay?: number; y?: number };
-
 /** List-item variant of Reveal, for use directly inside <ul>/<ol>. */
-export function RevealItem({ delay = 0, y = 20, children, ...props }: RevealItemProps) {
+export function RevealItem({ delay, y, immediate, className, style, children, ...props }: LiHTMLAttributes<HTMLLIElement> & RevealOptions) {
   return (
-    <motion.li
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
-      {...props}
-    >
+    <li {...props} {...revealProps({ delay, y, immediate }, className, style)}>
       {children}
-    </motion.li>
+    </li>
   );
 }

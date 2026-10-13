@@ -26,7 +26,7 @@ function Cover({ project }: { project: Project }) {
       >
         <Icon className="h-5 w-5" aria-hidden />
       </div>
-      <span className="absolute right-3 top-3 rounded-full bg-slate-950/70 px-2.5 py-1 font-mono text-[11px] font-medium text-white backdrop-blur">
+      <span className="absolute right-3 top-3 rounded-full bg-slate-950/80 px-2.5 py-1 font-mono text-[11px] font-medium text-white">
         {project.category}
       </span>
     </div>

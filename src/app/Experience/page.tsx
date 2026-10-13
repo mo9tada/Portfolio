@@ -18,7 +18,7 @@ export default function ExperiencePage() {
           title={<>Professional <span className="text-gradient">experience</span></>}
           description="Internships, freelance missions, ventures and proposals."
         />
-        <Reveal>
+        <Reveal immediate delay={0.1}>
           <ButtonLink href="/Resume.pdf" target="_blank" rel="noreferrer" variant="secondary">
             <Download className="h-4 w-4" aria-hidden />
             Résumé (PDF)

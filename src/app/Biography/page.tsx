@@ -20,7 +20,7 @@ export default function BiographyPage() {
           title={<>From analysis to <span className="text-gradient">production</span>.</>}
           description={profile.summary}
         />
-        <Reveal delay={0.1} className="flex flex-col gap-4 lg:items-end">
+        <Reveal immediate delay={0.1} className="flex flex-col gap-4 lg:items-end">
           <div className="flex flex-wrap gap-2 lg:justify-end">
             <span className="inline-flex items-center gap-1.5 rounded-full border bg-surface/70 px-3 py-1.5 text-xs text-muted-foreground">
               <MapPin className="h-3.5 w-3.5" aria-hidden /> {profile.location}

@@ -20,7 +20,7 @@ export default function ContactPage() {
 
             <div className="mt-12 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
                 <div className="flex flex-col gap-4">
-                    <Reveal>
+                    <Reveal immediate delay={0.1}>
                         <CopyEmail />
                     </Reveal>
                     <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
@@ -52,7 +52,7 @@ export default function ContactPage() {
                     </ul>
                 </div>
 
-                <Reveal delay={0.1}>
+                <Reveal immediate delay={0.15}>
                     <ContactForm />
                 </Reveal>
             </div>

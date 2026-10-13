@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "motion/react";
+import { CssOrb } from "./css-orb";
 
 const HeroScene = dynamic(() => import("./hero-scene"), { ssr: false });
 
@@ -27,22 +28,19 @@ function Chip({ label, className, depth, mx, my }: (typeof chips)[number] & { mx
   );
 }
 
-/** Lightweight stand-in shown until WebGL is ready (and kept if WebGL is unavailable). */
-function Placeholder({ hidden }: { hidden: boolean }) {
-  return (
-    <div
-      className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 ${hidden ? "opacity-0" : "opacity-100"}`}
-      aria-hidden
-    >
-      <div
-        className="h-[44%] w-[44%] rounded-full"
-        style={{
-          background: "radial-gradient(circle at 35% 30%, #6ee7b7, #059669 45%, #064e3b 80%)",
-          boxShadow: "0 0 80px -10px var(--glow-1), inset -20px -30px 60px rgb(0 0 0 / 0.35)",
-        }}
-      />
-    </div>
-  );
+/**
+ * The WebGL scene (~three.js) only loads on devices that can run it smoothly:
+ * large screen with a mouse, ≥4 cores, ≥4 GB RAM, no data saver, no reduced motion.
+ * Everyone else keeps the CSS orb, which is already painted from the server HTML.
+ */
+function canRunWebGL() {
+  const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
+  if (!window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches) return false;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  if (nav.connection?.saveData) return false;
+  if ((nav.deviceMemory ?? 8) < 4 || (nav.hardwareConcurrency ?? 8) < 4) return false;
+  const canvas = document.createElement("canvas");
+  return !!(canvas.getContext("webgl2") || canvas.getContext("webgl"));
 }
 
 export function HeroVisual() {
@@ -52,24 +50,34 @@ export function HeroVisual() {
   const my = useSpring(rawY, { stiffness: 60, damping: 18 });
   const [mountScene, setMountScene] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
+  const [orbGone, setOrbGone] = useState(false);
+  const [offscreen, setOffscreen] = useState(false);
+  const wrap = useRef<HTMLDivElement>(null);
+
+  // Pause the CSS orb's animations while the hero is scrolled away.
+  useEffect(() => {
+    if (!wrap.current) return;
+    const io = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
+    io.observe(wrap.current);
+    return () => io.disconnect();
+  }, []);
 
   // Defer the WebGL bundle until the browser is idle so text paints first.
   useEffect(() => {
-    const canvas = document.createElement("canvas");
-    if (!canvas.getContext("webgl2") && !canvas.getContext("webgl")) return;
+    if (!canRunWebGL()) return;
     const start = () => setMountScene(true);
     if ("requestIdleCallback" in window) {
-      const id = window.requestIdleCallback(start, { timeout: 1200 });
+      const id = window.requestIdleCallback(start, { timeout: 2000 });
       return () => window.cancelIdleCallback(id);
     }
-    const id = setTimeout(start, 300);
+    const id = setTimeout(start, 600);
     return () => clearTimeout(id);
   }, []);
 
   useEffect(() => {
+    if (!window.matchMedia("(pointer: fine)").matches) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
       rawX.set(e.clientX / window.innerWidth - 0.5);
       rawY.set(e.clientY / window.innerHeight - 0.5);
     };
@@ -78,12 +86,16 @@ export function HeroVisual() {
   }, [rawX, rawY]);
 
   return (
-    <div className="pointer-events-none relative aspect-square w-full max-w-[580px] justify-self-center" aria-hidden>
-      <div
-        className="absolute inset-[10%] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, var(--glow-1), transparent 70%)" }}
-      />
-      <Placeholder hidden={sceneReady} />
+    <div ref={wrap} className="pointer-events-none relative mx-auto aspect-square w-full max-w-[360px] sm:max-w-[480px] lg:max-w-[580px]" aria-hidden>
+      {/* Unmounted once faded out, so its CSS animations stop running behind the canvas. */}
+      {!orbGone && (
+        <div
+          className={`absolute inset-0 transition-opacity duration-700 ${sceneReady ? "opacity-0" : "opacity-100"}`}
+          onTransitionEnd={() => sceneReady && setOrbGone(true)}
+        >
+          <CssOrb paused={offscreen} />
+        </div>
+      )}
       {mountScene && (
         <motion.div
           className="absolute inset-0"

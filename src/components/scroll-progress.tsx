@@ -1,14 +1,8 @@
-"use client";
-
-import { motion, useScroll, useSpring } from "motion/react";
-
+// Driven by a CSS scroll timeline (globals.css): no scroll listeners, runs off the main thread.
 export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
   return (
-    <motion.div
-      style={{ scaleX }}
-      className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-gradient-to-r from-accent to-cyan-400"
+    <div
+      className="scroll-progress fixed inset-x-0 top-0 z-[60] h-0.5 bg-gradient-to-r from-accent to-cyan-400"
       aria-hidden
     />
   );

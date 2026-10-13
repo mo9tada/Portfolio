@@ -43,7 +43,6 @@ export function SkillSphere({ skills }: { skills: string[] }) {
         node.style.transform = `translate(-50%, -50%) translate3d(${x1 * radius}px, ${y2 * radius}px, 0) scale(${0.6 + depth * 0.55})`;
         node.style.opacity = String(0.25 + depth * 0.75);
         node.style.zIndex = String(Math.round(depth * 100));
-        node.style.filter = depth < 0.35 ? "blur(1px)" : "none";
       });
     };
 
@@ -111,7 +110,7 @@ export function SkillSphere({ skills }: { skills: string[] }) {
       className="relative mx-auto aspect-square w-full max-w-[460px] cursor-grab touch-none select-none active:cursor-grabbing"
     >
       <div
-        className="absolute inset-[18%] rounded-full blur-3xl"
+        className="absolute inset-[10%] rounded-full"
         style={{ background: "radial-gradient(circle, var(--glow-1), transparent 70%)" }}
       />
       <div className="absolute inset-[8%] rounded-full border border-dashed border-border-strong opacity-60" />

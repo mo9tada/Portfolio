@@ -24,36 +24,36 @@ export default function Home() {
       {/* Hero */}
       <section className="mx-auto grid min-h-dvh max-w-6xl items-center gap-6 px-4 pb-12 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
         <div className="relative z-10 flex flex-col items-start gap-6">
-          <Reveal className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border bg-surface/70 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
+          <Reveal immediate className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border bg-surface/90 px-3 py-1.5 text-xs font-medium text-muted-foreground">
               <span className="status-dot relative h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
               Available for new projects
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border bg-surface/70 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-surface/90 px-3 py-1.5 text-xs font-medium text-muted-foreground">
               <MapPin className="h-3.5 w-3.5" aria-hidden />
               {profile.location}
             </span>
           </Reveal>
 
-          <Reveal delay={0.05}>
+          <Reveal immediate delay={0.05}>
             <h1 className="text-5xl font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl">
               <span className="block text-muted-foreground text-2xl font-medium tracking-normal sm:text-3xl">Hi, I&apos;m</span>
               <span className="text-gradient">{profile.name}</span>
             </h1>
           </Reveal>
 
-          <Reveal delay={0.1} className="min-h-8 font-mono text-lg text-muted-foreground sm:text-xl">
+          <Reveal immediate delay={0.1} className="min-h-8 font-mono text-lg text-muted-foreground sm:text-xl">
             <span className="text-accent">&gt;</span> <Typewriter words={profile.roles} />
           </Reveal>
 
-          <Reveal delay={0.15}>
+          <Reveal immediate delay={0.15}>
             <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               I build management software and web applications — from financial analytics with AI at Vermeg to
               management platforms and production infrastructure. Autonomous from requirements to deployment.
             </p>
           </Reveal>
 
-          <Reveal delay={0.2} className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <Reveal immediate delay={0.2} className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <ButtonLink href="/Projects" arrow>
               View my work
             </ButtonLink>
@@ -64,7 +64,7 @@ export default function Home() {
           </Reveal>
         </div>
 
-        <Reveal delay={0.15} y={0} className="-mt-4 w-full lg:mt-0">
+        <Reveal immediate delay={0.1} y={0} className="-mt-4 w-full lg:mt-0">
           <HeroVisual />
         </Reveal>
       </section>
@@ -101,7 +101,7 @@ export default function Home() {
             </ButtonLink>
           </Reveal>
         </div>
-        <ul className="mt-10 divide-y overflow-hidden rounded-2xl border bg-surface/60 backdrop-blur">
+        <ul className="mt-10 divide-y overflow-hidden rounded-2xl border bg-surface/80">
           {experiences.slice(0, 4).map((exp, i) => (
             <RevealItem key={exp.company + exp.period} delay={i * 0.05}>
               <Link

@@ -15,7 +15,7 @@ export function SectionHeading({
   as?: "h1" | "h2";
 }) {
   return (
-    <Reveal className={cn("flex max-w-2xl flex-col gap-3", className)}>
+    <Reveal immediate={Tag === "h1"} className={cn("flex max-w-2xl flex-col gap-3", className)}>
       <p className="eyebrow">{eyebrow}</p>
       <Tag
         className={cn(
