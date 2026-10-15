@@ -1,6 +1,7 @@
 // Pure-CSS 3D orb: server-rendered, so it paints with the first HTML. Every animation is
 // transform/opacity only (compositor-friendly), which keeps it smooth on phones.
-// Used as the mobile hero and as the stand-in while the desktop WebGL scene loads.
+// Used as the fallback hero on devices that can't run the WebGL scene, and as the
+// stand-in while that scene loads.
 
 // Deterministic particle layout on a ring (no Math.random → identical on server and client).
 const particles = Array.from({ length: 42 }, (_, i) => {

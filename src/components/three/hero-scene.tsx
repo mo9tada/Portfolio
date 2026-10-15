@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, type RootState } from "@react-three/fiber";
 import { Environment, Float, Lightformer, MeshDistortMaterial, PerformanceMonitor } from "@react-three/drei";
-import { AdditiveBlending, BackSide, Color, MathUtils, type Group, type Mesh, type ShaderMaterial } from "three";
+import { AdditiveBlending, BackSide, Color, MathUtils, Vector2, type Group, type Mesh, type ShaderMaterial } from "three";
 
 type Palette = { core: string; accent: string; glow: string; particle: string };
 
@@ -79,6 +79,29 @@ const particleFragment = /* glsl */ `
 `;
 
 // ---------------------------------------------------------------------------
+// Where the scene "looks"
+// ---------------------------------------------------------------------------
+
+// This module only ever loads in the browser (dynamic import with ssr: false).
+const finePointer = window.matchMedia("(pointer: fine)").matches;
+
+/** Touch screens: last finger position relative to the canvas (unit disc) and when. */
+const touch = { x: 0, y: 0, at: -Infinity };
+const idlePath = new Vector2();
+
+/**
+ * With a mouse, the scene follows the cursor. Touch screens have no hovering cursor, so the
+ * scene leans toward the finger while you touch, then drifts on a slow idle path — it keeps
+ * moving the way it does under a mouse instead of sitting still.
+ */
+function lookTarget(state: RootState): Vector2 {
+  if (finePointer) return state.pointer;
+  if (performance.now() - touch.at < 2500) return idlePath.set(touch.x, touch.y);
+  const t = state.clock.elapsedTime;
+  return idlePath.set(Math.sin(t * 0.32) * 0.8, Math.cos(t * 0.23) * 0.6);
+}
+
+// ---------------------------------------------------------------------------
 // Pieces
 // ---------------------------------------------------------------------------
 
@@ -88,7 +111,8 @@ function Core({ palette, still }: { palette: Palette; still: boolean }) {
   const mat = useRef<{ distort: number } | null>(null);
   useFrame((state, delta) => {
     if (!mat.current || still) return;
-    const near = 1 - Math.min(1, Math.hypot(state.pointer.x, state.pointer.y));
+    const look = lookTarget(state);
+    const near = 1 - Math.min(1, Math.hypot(look.x, look.y));
     mat.current.distort = MathUtils.damp(mat.current.distort, 0.28 + near * 0.22, 2.5, delta);
   });
   return (
@@ -197,6 +221,7 @@ function buildGalaxy(count: number) {
 function Galaxy({ color, count, still }: { color: string; count: number; still: boolean }) {
   const ref = useRef<Group>(null);
   const dpr = useThree((s) => s.viewport.dpr);
+  const height = useThree((s) => s.size.height);
 
   const { positions, scales, phases } = useMemo(() => buildGalaxy(count), [count]);
 
@@ -215,7 +240,10 @@ function Galaxy({ color, count, still }: { color: string; count: number; still: 
     if (!mat.current) return;
     mat.current.uniforms.uColor.value.set(color);
     mat.current.uniforms.uPixelRatio.value = dpr;
-  }, [color, dpr]);
+    // Point sizes are in pixels while everything else scales with the canvas, so scale them
+    // too: a phone-sized scene keeps the proportions of the desktop one (tuned at 580px).
+    mat.current.uniforms.uSize.value = 38 * MathUtils.clamp(height / 580, 0.5, 1);
+  }, [color, dpr, height]);
 
   useFrame((state, delta) => {
     if (still || !mat.current) return;
@@ -277,8 +305,9 @@ function Rig({ children, still }: { children: React.ReactNode; still: boolean })
   useFrame((state, delta) => {
     if (!group.current) return;
     const scroll = Math.min(window.scrollY / window.innerHeight, 1.2);
-    const tx = still ? 0 : state.pointer.y * 0.3 + scroll * 0.5;
-    const ty = still ? 0 : state.pointer.x * 0.45 + scroll * 0.8;
+    const look = lookTarget(state);
+    const tx = still ? 0 : look.y * 0.3 + scroll * 0.5;
+    const ty = still ? 0 : look.x * 0.45 + scroll * 0.8;
     group.current.rotation.x = MathUtils.damp(group.current.rotation.x, tx, 3, delta);
     group.current.rotation.y = MathUtils.damp(group.current.rotation.y, ty, 3, delta);
     group.current.position.y = MathUtils.damp(group.current.position.y, scroll * 0.6, 3, delta);
@@ -342,6 +371,28 @@ export default function HeroScene({ onReady }: { onReady?: () => void }) {
     };
   }, []);
 
+  // Touch screens: track the finger relative to the canvas, clamped to the unit disc so a
+  // touch far down the page leans the scene gently instead of flipping it (see lookTarget).
+  useEffect(() => {
+    if (finePointer) return;
+    const onTouch = (e: PointerEvent) => {
+      const r = wrap.current?.getBoundingClientRect();
+      if (!r?.width) return;
+      const x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      const y = 1 - ((e.clientY - r.top) / r.height) * 2;
+      const len = Math.max(1, Math.hypot(x, y));
+      touch.x = x / len;
+      touch.y = y / len;
+      touch.at = performance.now();
+    };
+    window.addEventListener("pointerdown", onTouch, { passive: true });
+    window.addEventListener("pointermove", onTouch, { passive: true });
+    return () => {
+      window.removeEventListener("pointerdown", onTouch);
+      window.removeEventListener("pointermove", onTouch);
+    };
+  }, []);
+
   return (
     <div ref={wrap} className="absolute inset-0">
       <Canvas
@@ -351,6 +402,9 @@ export default function HeroScene({ onReady }: { onReady?: () => void }) {
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance", stencil: false }}
         eventSource={document.body}
         eventPrefix="client"
+        // Measure the layout size, ignoring transforms: the canvas mounts mid fade-in at
+        // scale 0.92, and measuring that would leave the drawing buffer ~8% too small (blurry).
+        resize={{ offsetSize: true }}
         // Wait one frame after setup so shaders are compiled before fading in.
         onCreated={() => requestAnimationFrame(() => requestAnimationFrame(() => onReady?.()))}
       >

@@ -336,7 +336,20 @@ html.loaded #loader::after { opacity: 1; transition: opacity 0.2s 0.25s; }
 }
 
 /* ------------------------------------------------------------------ */
-/* CSS orb (mobile hero / WebGL stand-in)                              */
+/* Hero tech chips: they follow the mouse on desktop; touch screens    */
+/* have no cursor, so there they bob gently — only alongside the WebGL */
+/* scene, since moving blurred glass costs frames on low-end phones    */
+/* that get the CSS orb. `translate` is separate from the `transform`  */
+/* the mouse parallax writes, so both can apply.                       */
+/* ------------------------------------------------------------------ */
+@keyframes chip-bob { 50% { translate: 0 -6px; } }
+@media (pointer: coarse) {
+  [data-scene="ready"] .hero-chip { animation: chip-bob 4.8s ease-in-out infinite; }
+}
+
+/* ------------------------------------------------------------------ */
+/* CSS orb: fallback hero for devices that can't run the WebGL scene,  */
+/* and the stand-in shown while it loads.                              */
 /* ------------------------------------------------------------------ */
 .orb {
   position: absolute;
