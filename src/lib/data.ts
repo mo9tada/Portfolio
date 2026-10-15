@@ -46,6 +46,21 @@ export type Experience = {
 
 export const experiences: Experience[] = [
   {
+    company: "Club MC27",
+    sector: "Coffee & venue",
+    role: "Software Developer",
+    type: "Freelance",
+    period: "Jun 2026 – Present",
+    current: true,
+    project: "Professional representation & reservation system",
+    points: [
+      "Venue platform with table reservations (email OTP verification and confirmation emails) and event pages with RSVPs.",
+      "Promotional spin wheel limited to one spin per day, generating PDF discount vouchers.",
+      "Admin back office to manage reservations, events, wheel prizes and reply to contact messages.",
+    ],
+    stack: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
+  },
+  {
     company: "Tamezrate",
     sector: "Agri-food",
     role: "Technical Lead",
@@ -174,10 +189,10 @@ export const projects: Project[] = [
   },
   {
     name: "Club MC27",
-    context: "Side project",
+    context: "Club MC27 · 2026–now",
     category: "Management",
-    blurb: "Venue management platform with bookings, a promotional prize wheel and an administration back office.",
-    tags: ["Bookings", "Back office"],
+    blurb: "Venue platform for MC27 Coffee: verified table reservations, events with RSVPs, a daily spin wheel that issues PDF vouchers, and an admin back office.",
+    tags: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
     icon: Ticket,
     hue: "#F59E0B",
     visual: "wheel",
