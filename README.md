@@ -9,6 +9,10 @@
 
 My personal site: who I am, where I've worked, what I've built, and how to reach me.
 
+![Home page](docs/home.jpg)
+
+![Projects page](docs/projects.jpg)
+
 ## What's inside
 
 - **Home, About, Experience, Projects, Contact** pages using the App Router
